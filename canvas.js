@@ -2,7 +2,7 @@ let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
 let barWidth = 30;
-let chainLinkLength = 5;
+let chainLinkLength = 10;
 
 function drawTopBar(width) {
     let oldColor = ctx.fillStyle;
@@ -34,7 +34,7 @@ class ChainLink {
 }
 
 let chain = []
-for (var i = 0; i < 50 ; i++) {
+for (var i = 0; i < 40 ; i++) {
     chain.push(new ChainLink(canvas.width / 2.0, i * chainLinkLength, chainLinkLength))
 }
 
@@ -42,19 +42,19 @@ function drawer() {
     ctx.beginPath();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.stroke();
-    for (let i = 1; i < chain.length - 1; i++) {
-        let prevLink = chain[i];
-        let curLink = chain[i + 1];
 
-        let dx = curLink.length;
-        console.log("dx = " + dx);
-        curLink.x = prevLink.x + dx;
-        let dy = Math.sqrt(Math.abs(dx * dx - curLink.length));
-        console.log("dy = " + dy);
-        curLink.y = prevLink.y + dy;
+    for (let i = 0; i < chain.length - 1; i++) {
+        let currentLink = chain[i];
+        let nextLink = chain[i + 1];
+
+        let dx = Math.sin(Date.now() / 300) * (chainLinkLength - 1);
+        nextLink.x = currentLink.x + dx;
+        let dy = Math.sqrt(Math.abs(dx * dx - nextLink.length * nextLink.length));
+        nextLink.y = currentLink.y + dy;
     }
     drawTopBar(barWidth);
     drawChain(chain);
 }
 
-let mainInterval = setInterval(drawer, 500);
+drawer();
+let mainInterval = setInterval(drawer, 10);
